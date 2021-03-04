@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import productos.ProductoPanel;
+
 /**
  * 
  * Este es el panel principal, todos los modulos de la interfaz
@@ -21,25 +23,22 @@ public class MainPanel extends JPanel{
 	
 	private final MainFrame frame;
 	private final BorderLayout layout;
+	private String selectedMenu;
 	
 	public MainPanel() {
 		this.frame = new MainFrame();
 		this.layout = new BorderLayout();
+		this.selectedMenu = "Productos";
 
 		// Configuraciones de este panel
 		this.setLayout(this.layout);
 
 		this.add(new LateralPanel(this.getSize()), BorderLayout.WEST);
-
+		this.add(new ProductoPanel(), BorderLayout.CENTER);
 
 		// configuraciones del frame
 		frame.add(this);
 	}
-	
-	
-	
-	
-	
 	
 	
 	private class MainFrame extends JFrame {
