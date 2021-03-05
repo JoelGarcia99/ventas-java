@@ -1,9 +1,6 @@
 package design;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import java.awt.Dimension;
-import java.awt.Insets;
 
 public class Buttons extends JButton {
     

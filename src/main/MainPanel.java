@@ -5,7 +5,10 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import productos.ProductoPanel;
+import Observer.Observador;
+import vistas.ClientesPanel;
+import vistas.ProductoPanel;
+import vistas.Vendedores;
 
 /**
  * 
@@ -14,27 +17,36 @@ import productos.ProductoPanel;
  *
  */
 
-public class MainPanel extends JPanel{
+public class MainPanel extends JPanel implements Observador{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -892554275836568837L;
 	
 	private final MainFrame frame;
 	private final BorderLayout layout;
-	private String selectedMenu;
-	
+	private JPanel [] paneles = {
+		new JPanel(),
+		new ProductoPanel(),
+		new JPanel(),
+		new Vendedores(),
+		new ClientesPanel(),
+	};
+	private JPanel panel;
+
 	public MainPanel() {
+
+		// Suscribiendose a un observable para ser notificado
+		LateralPanel.observadores.add(this);
+
+
 		this.frame = new MainFrame();
 		this.layout = new BorderLayout();
-		this.selectedMenu = "Productos";
+		this.panel = paneles[0];
 
 		// Configuraciones de este panel
 		this.setLayout(this.layout);
 
 		this.add(new LateralPanel(this.getSize()), BorderLayout.WEST);
-		this.add(new ProductoPanel(), BorderLayout.CENTER);
+		this.add(panel, BorderLayout.CENTER);
 
 		// configuraciones del frame
 		frame.add(this);
@@ -61,6 +73,14 @@ public class MainPanel extends JPanel{
 			this.setLocationRelativeTo(null);
 		}
 		
+	}
+
+	@Override
+	public void notifyAction(int selected) {
+		this.remove(panel);
+		panel = paneles[selected];
+		this.add(panel, BorderLayout.CENTER);
+		this.updateUI();
 	}
 	
 }
