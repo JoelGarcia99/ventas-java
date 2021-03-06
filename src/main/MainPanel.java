@@ -4,9 +4,12 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.BorderLayout;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -15,6 +18,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -23,13 +27,16 @@ import Observer.Observador;
 import estructuras.ArbolAVL;
 import estructuras.ListaSimpleOrdenada;
 import modelos.Carrito;
+import modelos.Cliente;
 import modelos.Producto;
+import modelos.Vendedor;
 import modelos.Venta;
 import vistas.ClientesPanel;
 import vistas.ComprasPanel;
 import vistas.ProductoPanel;
 import vistas.VendedoresPanel;
 import vistas.VentasPanel;
+import vistas.VistaGeneral;
 
 /**
  * 
@@ -46,8 +53,15 @@ public class MainPanel extends JPanel implements Observador{
 	public static ArbolAVL arbolCliente = new ArbolAVL();
 	public static ArbolAVL arbolVendedor = new ArbolAVL();
 	public static ArbolAVL arbolCompra = new ArbolAVL();
+	public static ArbolAVL arbolVenta = new ArbolAVL();
+	public static ArrayList<Cliente> clientesArray = new ArrayList<>();
+	public static ArrayList<Vendedor> vendedoresArray = new ArrayList<>();
 	
 	public static ListaSimpleOrdenada listaPro = new ListaSimpleOrdenada();
+	public static ListaSimpleOrdenada listaCliente = new ListaSimpleOrdenada();
+	public static ListaSimpleOrdenada listaVendedor = new ListaSimpleOrdenada();
+	public static ListaSimpleOrdenada listaVenta = new ListaSimpleOrdenada();
+	public static ListaSimpleOrdenada listaCompra = new ListaSimpleOrdenada();
 	
 	private final MainFrame frame;
 	private final BorderLayout layout;
@@ -62,6 +76,7 @@ public class MainPanel extends JPanel implements Observador{
 	
 	private final JMenu menuArchivo;
 	private final JMenuItem salirArchivo;
+	private final JMenuItem generarReporte;
 	
 	private JPanel [] paneles = {
 		new ProductoPanel(),
@@ -87,6 +102,7 @@ public class MainPanel extends JPanel implements Observador{
 		this.pagarCarrito = new JMenuItem("Pagar");
 		this.descartarCarrito = new JMenuItem("Reiniciar");
 		this.salirArchivo = new JMenuItem("Salir");
+		this.generarReporte = new JMenuItem("Generar reporte");
 
 		this.frame = new MainFrame();
 		this.layout = new BorderLayout();
@@ -114,8 +130,11 @@ public class MainPanel extends JPanel implements Observador{
 		menuCarrito.add(pagarCarrito);
 		menuCarrito.add(descartarCarrito);
 		
+		menuArchivo.add(generarReporte);
+		menuArchivo.add(new JSeparator());
 		menuArchivo.add(salirArchivo);
 		salirArchivo.addActionListener(event);
+		generarReporte.addActionListener(event);
 		
 		verCarrito.addActionListener(event);
 		agregarAlCarrito.addActionListener(event);
@@ -138,6 +157,9 @@ public class MainPanel extends JPanel implements Observador{
 				}; break;
 				case "Borrar producto": {
 					eliminaItem();
+				}; break;
+				case "Generar reporte": {
+					JOptionPane.showMessageDialog(null, generarReporte(), "Reporte", JOptionPane.INFORMATION_MESSAGE);
 				}; break;
 				case "Pagar": {
 					pagarCarrito();
@@ -242,27 +264,41 @@ public class MainPanel extends JPanel implements Observador{
 	
 	private void pagarCarrito() {
 		
-		JTextField clienteID = new JTextField();
-		JTextField vendedorID = new JTextField();
+		if(clientesArray.size()<1) {
+			JOptionPane.showMessageDialog(null, "No hay clientes registrados");return;
+		}
+		
+		if(vendedoresArray.size()<1) {
+			JOptionPane.showMessageDialog(null, "No hay vendedores registrados");return;
+		}
+		
 		JPanel panel = new JPanel();
+
+		JComboBox<String> cliente = new JComboBox<>();
+		JComboBox<String> vendedor = new JComboBox<>();
+		
+		panel.add(cliente);
+		panel.add(vendedor);
+		
+		for(Cliente c:clientesArray) {
+			cliente.addItem(c.getID()+" | "+c.getNombre());
+		}
+		
+		for(Vendedor v:vendedoresArray) {
+			vendedor.addItem(v.getID()+" | "+v.getNombre());
+		}
+		
 		
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		
-		panel.add(new JLabel("Cliente ID"));
-		panel.add(clienteID);
-		panel.add(new JLabel("Vendedor ID"));
-		panel.add(vendedorID);
+		panel.add(new JLabel("Cliente"));
+		panel.add(cliente);
+		panel.add(new JLabel("Vendedor"));
+		panel.add(vendedor);
 		
 		JOptionPane.showMessageDialog(null, panel, "Pagar carrito", JOptionPane.INFORMATION_MESSAGE);
 		
-		if(!arbolCliente.existe(clienteID.getText())) {
-			JOptionPane.showMessageDialog(null, "El cliente no existe");
-			return;
-		}
-		if(!arbolVendedor.existe(vendedorID.getText())) {
-			JOptionPane.showMessageDialog(null, "El vendedor no existe");
-			return;
-		}
+		
 		if(carrito.getProductos().size() < 1) {
 			JOptionPane.showMessageDialog(null, "No hay productos en el carrito");
 			return;
@@ -272,7 +308,12 @@ public class MainPanel extends JPanel implements Observador{
 			Venta venta = new Venta();
 			venta.setProductos(carrito.getProductos());
 			venta.setProductosCantidad(carrito.getProductosCantidad());
-			venta.guardar(clienteID.getText(), vendedorID.getText());
+			venta.guardar(
+					clientesArray.get(cliente.getSelectedIndex()), 
+					vendedoresArray.get(vendedor.getSelectedIndex())
+			);
+			
+			((VistaGeneral)paneles[3]).redibujarTabla();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
@@ -282,6 +323,30 @@ public class MainPanel extends JPanel implements Observador{
 
 	}
 
+	
+	private JPanel generarReporte() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		
+		panel.add(new JLabel("<html><body><h1>Reporte</h1></body></html>"));
+		panel.add(Box.createVerticalStrut(20));
+		panel.add(new JLabel("<html><body>"
+				+ "<b>Ventas realizadas</b>:&nbsp;"
+				+ listaVenta.getSize()
+				+ "<br><b>Numero de clientes</b>:&nbsp;"
+				+ clientesArray.size()
+				+ "<br><b>Numero de vendedores</b>:&nbsp;"
+				+ arbolVendedor.size()
+				+ "<br><b>Productos registrados</b>:&nbsp;"
+				+ arbolPro.size()
+				+ "</body></html>"
+		));
+		
+		
+		
+		return panel;
+	}
+	
 	private class MainFrame extends JFrame {
 		
 		/**

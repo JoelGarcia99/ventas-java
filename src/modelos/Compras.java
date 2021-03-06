@@ -77,8 +77,7 @@ public class Compras extends ModeloGenerico{
 
 	@Override
 	public String getCriterio() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getProducto()+" "+this.getID();
 	}
 	
 	

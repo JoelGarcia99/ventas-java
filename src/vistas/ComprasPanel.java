@@ -4,14 +4,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
+import estructuras.ModeloGenerico;
 import main.MainPanel;
 import modelos.Compras;
 
@@ -45,8 +50,13 @@ public class ComprasPanel extends VistaGeneral{
 		if(compras != null) {		
 			// para despues poder buscar
 			MainPanel.arbolCompra.insertar(compras);
+			MainPanel.listaCompra.insertar(compras);
 	        this.itemsTabla.modelo.addRow(new Object[] {
 	        		compras.getID(),
+	        		compras.getProveedor(),
+	        		compras.getFecha(),
+	        		compras.getProducto(),
+	        		compras.getCantidad()
 	        });
 	        this.itemsTabla.updateUI();
 		}
@@ -62,6 +72,8 @@ public class ComprasPanel extends VistaGeneral{
 
 		// para despues poder buscar
 		MainPanel.arbolCompra.insertar(compras);
+		MainPanel.listaCompra.insertar(compras);
+		
 		
         this.itemsTabla.modelo.addRow(new Object[] {
         		compras.getID(),
@@ -74,9 +86,35 @@ public class ComprasPanel extends VistaGeneral{
 	}
 
 	@Override
-	protected void buscarItem(String ID) {
-		// TODO Auto-generated method stub
+	protected void buscarItem(String criterio) {
+		if(criterio == null) criterio = "";
 		
+		ArrayList<ModeloGenerico> pro = MainPanel.listaCompra.buscar(criterio);
+		
+		if(pro.size() == 0) {
+			JOptionPane.showMessageDialog(null, "Venta no hallada");
+			return;
+		}
+		
+		JTable table = new JTable();
+		JScrollPane scroll = new JScrollPane(table);
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		
+		model.setColumnIdentifiers(new Object[] {"ID", "Proveedor", "Fecha", "Producto", "Cantidad"});
+		
+		for(ModeloGenerico mo:pro) {
+			Compras p = (Compras) mo;
+			
+			model.addRow(new Object[] {
+					p.getID(),
+					p.getProveedor(),
+	        		p.getFecha(),
+	        		p.getProducto(),
+	        		p.getCantidad()
+			});
+		}
+		
+		JOptionPane.showMessageDialog(null, scroll);
 	}
 
 }

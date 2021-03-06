@@ -92,7 +92,7 @@ public class Producto extends ModeloGenerico implements Serializable{
 
 	@Override
 	public String getCriterio() {
-		return this.getNombre();
+		return this.getNombre()+this.getID();
 	}
 
 }

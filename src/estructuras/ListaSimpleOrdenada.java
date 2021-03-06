@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 public class ListaSimpleOrdenada {
 	private NodoLista root;
+	private long size;
 	
 	public ListaSimpleOrdenada() {
 		this.root = null;
+		this.size = 0;
 	}
 	
 	// Insertando en orden alfabetico
@@ -16,6 +18,7 @@ public class ListaSimpleOrdenada {
 		
 		if(this.root == null) {
 			this.root = nodo;
+			++this.size;
 			return;
 		}
 		
@@ -23,6 +26,7 @@ public class ListaSimpleOrdenada {
 		if(dato.getCriterio().toUpperCase().compareTo(this.root.getDato().getCriterio().toUpperCase()) < 0) {
 			nodo.setSiguiente(this.root);
 			this.root = nodo;
+			++this.size;
 			return;
 		}
 		
@@ -39,6 +43,7 @@ public class ListaSimpleOrdenada {
 		
 		// insertando el nodo en su posicion
 		aux.setSiguiente(nodo);
+		++this.size;
 	}
 
 	public void eliminar(ModeloGenerico dato) {
@@ -54,6 +59,7 @@ public class ListaSimpleOrdenada {
 		// eliminando la raiz si es el caso
 		if(raizDato.equals(eliminarDato)) {
 			this.root = this.root.getSiguiente();
+			--this.size;
 			return;
 		}
 		
@@ -64,9 +70,14 @@ public class ListaSimpleOrdenada {
 			
 			if(raizDato.equals(eliminarDato)) {
 				aux.setSiguiente(aux.getSiguiente().getSiguiente());
-				break;
+				--this.size;
+				return;
 			}
+			
+			aux = aux.getSiguiente();
 		}
+		
+		System.out.println("No hay nada que eliminar");
 		
 		
 	}
@@ -97,6 +108,9 @@ public class ListaSimpleOrdenada {
 		
 		return resultados;
 	}
-
+	
+	public long getSize() {
+		return this.size;
+	}
 
 }

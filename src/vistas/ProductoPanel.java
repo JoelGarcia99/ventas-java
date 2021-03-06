@@ -107,7 +107,7 @@ public class ProductoPanel extends VistaGeneral{
 						Producto new_ = editarProducto(producto);
 						
 						if(new_ == null) return;
-																		
+						
 						itemsTabla.modelo.setValueAt(new_.getID(), rowIndex, 0);
 						itemsTabla.modelo.setValueAt(new_.getNombre(), rowIndex, 1);
 						itemsTabla.modelo.setValueAt(new_.getDescripcion(), rowIndex, 2);
@@ -245,7 +245,7 @@ class AgregarProductoForm extends JPanel {
         boolean correcto = true;
         String mensaje = "Todo OK";
 
-        if (!this.nombre.getText().matches("^[A-Za-z0-9][A-Za-z0-9 ]+")) {
+        if (!this.nombre.getText().matches("^[A-Za-z0-9][A-Za-z0-9: ]+")) {
             mensaje = "El nombre no es correcto";
             correcto = false;
         }

@@ -47,6 +47,6 @@ public abstract class Persona extends ModeloGenerico implements Serializable{
 
 
 	public abstract void guardar() throws IOException;
-    public abstract void actualizar();
-    public abstract void eliminar();
+    public abstract void actualizar() throws IOException;
+    public abstract void eliminar() throws IOException;
 }

@@ -10,10 +10,10 @@ public class Venta extends AbsVenta implements Serializable{
      *
      */
     private static final long serialVersionUID = -2866862816460402591L;
-    private String cliente;
-    private String vendedor;
+    private Cliente cliente;
+    private Vendedor vendedor;
 
-    public void guardar(String cliente, String vendedor) throws IOException{
+    public void guardar(Cliente cliente, Vendedor vendedor) throws IOException{
 
         this.cliente = cliente;
         this.vendedor = vendedor;
@@ -25,26 +25,25 @@ public class Venta extends AbsVenta implements Serializable{
         escribiendoFichero.close();
     }
 
-    public String getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(String cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
-    public String getVendedor() {
+    public Vendedor getVendedor() {
         return vendedor;
     }
 
-    public void setVendedor(String vendedor) {
+    public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
     }
 
 	@Override
 	public String getCriterio() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getFecha()+this.getID();
 	}
 
 }

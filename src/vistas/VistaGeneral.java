@@ -3,18 +3,17 @@ package vistas;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-
 import design.Buttons;
 import helper.ButtonTableRender;
 import helper.LectorDirectorio;
+import main.MainPanel;
+
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -91,11 +90,19 @@ public abstract class VistaGeneral extends JPanel {
         
     }
     
-    protected void redibujarTabla() {
+    public void redibujarTabla() {
+    	if(nombre == "Clientes") {
+	    	MainPanel.clientesArray.clear();
+	    }else if(nombre == "Vendedores") {
+	    	MainPanel.vendedoresArray.clear();
+	    }
+    	
     	this.remove(this.itemsTabla);
     	this.itemsTabla = new ItemList(columnas, editable);
         leeProductos();
         this.add(this.itemsTabla, BorderLayout.CENTER);
+        
+ 
         
         this.updateUI();
     }
@@ -192,7 +199,7 @@ class ItemList extends JPanel {
 				for (int i : editable) {
 					if(i == vColIndex) return true;
 				}
-								
+				
 				return false;
             }
 			

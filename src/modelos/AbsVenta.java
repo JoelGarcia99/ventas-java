@@ -64,19 +64,17 @@ public abstract class AbsVenta extends ModeloGenerico{
 	public String formatProductos() {
 		
 		int cantidadIndex = 0;
-		String formato = "<html><body>";
+		String formato = "";
 		
 		for(Producto producto:productos) {
-			formato += "<b>Producto:&nbsp;</b>";
+			formato += "Producto: ";
 			formato += producto.getNombre();
-			formato += "<br><b>Cantidad</b>:&nbsp;"+productosCantidad.get(cantidadIndex);
-			formato += "<br><br>";
+			formato += "\nCantidad: "+productosCantidad.get(cantidadIndex);
+			formato += "\n----------------------------------------\n";
 			
 			++cantidadIndex;
 		}
-		
-		formato += "</body></html>";
-		
+				
 		return formato;
 	}
     
