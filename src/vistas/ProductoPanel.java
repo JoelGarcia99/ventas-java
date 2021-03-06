@@ -5,8 +5,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
+import estructuras.ModeloGenerico;
 import main.MainPanel;
 import modelos.Producto;
 
@@ -15,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 
 public class ProductoPanel extends VistaGeneral{
 	
@@ -50,6 +55,7 @@ public class ProductoPanel extends VistaGeneral{
 		if(producto != null) {
 			// para despues poder buscar
 			MainPanel.arbolPro.insertar(producto);
+			MainPanel.listaPro.insertar(producto);
 		
 	        this.itemsTabla.modelo.addRow(new Object[] {
 	        		producto.getID(),
@@ -57,6 +63,7 @@ public class ProductoPanel extends VistaGeneral{
 	        		producto.getDescripcion(),
 	        		producto.getPrecio()
 	        });
+	        
 	        generaBotones(producto);
 	        itemsTabla.productosTabla.updateUI();
 		}
@@ -71,6 +78,7 @@ public class ProductoPanel extends VistaGeneral{
 
 		// para despues poder buscar
 		MainPanel.arbolPro.insertar(producto);
+		MainPanel.listaPro.insertar(producto);
 		
         this.itemsTabla.modelo.addRow(new Object[] {
         		producto.getID(),
@@ -167,17 +175,34 @@ public class ProductoPanel extends VistaGeneral{
 	}
 
 	@Override
-	protected void buscarItem(String ID) {
-		if(ID == null) ID = "";
+	protected void buscarItem(String criterio) {
+		if(criterio == null) criterio = "";
 		
-		Producto pro = (Producto) MainPanel.arbolPro.buscar(ID);
+		ArrayList<ModeloGenerico> pro = MainPanel.listaPro.buscar(criterio);
 		
-		if(pro == null) {
+		if(pro.size() == 0) {
 			JOptionPane.showMessageDialog(null, "Producto no hallado");
 			return;
 		}
 		
-		JOptionPane.showMessageDialog(null, pro.getID());
+		JTable table = new JTable();
+		JScrollPane scroll = new JScrollPane(table);
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		
+		model.setColumnIdentifiers(new Object[] {"ID", "Nombre", "Descripcion", "Precio"});
+		
+		for(ModeloGenerico mo:pro) {
+			Producto p = (Producto) mo;
+			
+			model.addRow(new Object[] {
+					p.getID(),
+					p.getNombre(),
+					p.getDescripcion(),
+					p.getPrecio()
+			});
+		}
+		
+		JOptionPane.showMessageDialog(null, scroll);
 	}
 }
 

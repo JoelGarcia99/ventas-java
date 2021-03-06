@@ -1,10 +1,10 @@
 package estructuras;
 
 
-public class ArbolAVLProducto extends ArbolProducto{
+public class ArbolAVL extends Arbol{
 	
 	@Override
-	protected NodoProducto insertar(NodoProducto producto, NodoProducto root) {
+	protected NodoArbol insertar(NodoArbol producto, NodoArbol root) {
 		
 		if(root == null) {
 			
@@ -30,7 +30,7 @@ public class ArbolAVLProducto extends ArbolProducto{
 	}
 	
 	
-	private NodoProducto eliminar(String codigo, NodoProducto root) {
+	private NodoArbol eliminar(String codigo, NodoArbol root) {
 		
 		if(root == null) {
 			System.err.println("No se encontro el producto");
@@ -45,7 +45,7 @@ public class ArbolAVLProducto extends ArbolProducto{
 			root.setDer(eliminar(codigo, root.getDer()));
 		}else {
 			if(root.getIzq() != null) {
-				NodoProducto mayor_subarbol = root.getIzq().getDer();
+				NodoArbol mayor_subarbol = root.getIzq().getDer();
 				root.getIzq().setDer(root.getDer());
 				root = root.getIzq();
 				
@@ -69,7 +69,7 @@ public class ArbolAVLProducto extends ArbolProducto{
 		
 	}
 	
-	private NodoProducto evaluaBalance(NodoProducto root) {
+	private NodoArbol evaluaBalance(NodoArbol root) {
 	
 		int balanceIzquierdo = root.getIzq() != null? root.getIzq().getBalance():0;
 		int balanceDerecho = root.getDer() != null? root.getDer().getBalance():0;
@@ -96,8 +96,8 @@ public class ArbolAVLProducto extends ArbolProducto{
 		return actualizaBalance(root);
 	}
 
-	private NodoProducto rotacionSimpleDerecha(NodoProducto root) {
-		NodoProducto nueva_raiz = root.getIzq();
+	private NodoArbol rotacionSimpleDerecha(NodoArbol root) {
+		NodoArbol nueva_raiz = root.getIzq();
 		
 		root.setIzq(nueva_raiz.getDer());
 		nueva_raiz.setDer(root);
@@ -105,8 +105,8 @@ public class ArbolAVLProducto extends ArbolProducto{
 		return actualizaBalance(nueva_raiz);
 	}
 	
-	private NodoProducto rotacionSimpleIzquierda(NodoProducto root) {
-		NodoProducto nueva_raiz = root.getDer();
+	private NodoArbol rotacionSimpleIzquierda(NodoArbol root) {
+		NodoArbol nueva_raiz = root.getDer();
 		
 		root.setDer(nueva_raiz.getIzq());
 		nueva_raiz.setIzq(root);
@@ -114,19 +114,19 @@ public class ArbolAVLProducto extends ArbolProducto{
 		return nueva_raiz;
 	}
 	
-	private NodoProducto rotacionDobleDerecha(NodoProducto root) {
+	private NodoArbol rotacionDobleDerecha(NodoArbol root) {
 		root.setIzq(rotacionSimpleIzquierda(root.getIzq()));
 		return rotacionSimpleDerecha(root);
 	}
 	
-	private NodoProducto rotacionDobleIzquierda(NodoProducto root) {
+	private NodoArbol rotacionDobleIzquierda(NodoArbol root) {
 		root.setDer(rotacionSimpleDerecha(root.getDer()));
 		return rotacionSimpleIzquierda(root);
 	}
 	
-	private NodoProducto actualizaBalance(NodoProducto root) {
-		NodoProducto hijoIzq = root.getIzq();
-		NodoProducto hijoDer = root.getDer();
+	private NodoArbol actualizaBalance(NodoArbol root) {
+		NodoArbol hijoIzq = root.getIzq();
+		NodoArbol hijoDer = root.getDer();
 		
 		int hi = hijoIzq != null? hijoIzq.getBalance():0;
 		int hd = hijoDer != null? hijoDer.getBalance():0;

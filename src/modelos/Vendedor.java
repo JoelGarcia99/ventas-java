@@ -34,5 +34,11 @@ public class Vendedor extends Persona {
     public void eliminar() {
         // TODO Auto-generated method stub
     }
+
+	@Override
+	public String getCriterio() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
 }

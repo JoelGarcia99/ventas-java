@@ -20,7 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Observer.Observador;
-import estructuras.ArbolAVLProducto;
+import estructuras.ArbolAVL;
+import estructuras.ListaSimpleOrdenada;
 import modelos.Carrito;
 import modelos.Producto;
 import modelos.Venta;
@@ -41,10 +42,12 @@ public class MainPanel extends JPanel implements Observador{
 
 	private static final long serialVersionUID = -892554275836568837L;
 	public static Carrito carrito = new Carrito();
-	public static ArbolAVLProducto arbolPro = new ArbolAVLProducto();
-	public static ArbolAVLProducto arbolCliente = new ArbolAVLProducto();
-	public static ArbolAVLProducto arbolVendedor = new ArbolAVLProducto();
-	public static ArbolAVLProducto arbolCompra = new ArbolAVLProducto();
+	public static ArbolAVL arbolPro = new ArbolAVL();
+	public static ArbolAVL arbolCliente = new ArbolAVL();
+	public static ArbolAVL arbolVendedor = new ArbolAVL();
+	public static ArbolAVL arbolCompra = new ArbolAVL();
+	
+	public static ListaSimpleOrdenada listaPro = new ListaSimpleOrdenada();
 	
 	private final MainFrame frame;
 	private final BorderLayout layout;

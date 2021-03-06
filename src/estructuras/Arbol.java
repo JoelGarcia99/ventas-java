@@ -1,16 +1,16 @@
 package estructuras;
 
-public abstract class ArbolProducto {
-	protected NodoProducto root;
+public abstract class Arbol {
+	protected NodoArbol root;
 	protected long size;
 	
-	public ArbolProducto() {
+	public Arbol() {
 		this.root = null;
 		this.size = 0;
 	}
 	
 	public void insertar(ModeloGenerico x) {
-		NodoProducto producto = new NodoProducto(x);
+		NodoArbol producto = new NodoArbol(x);
 		
 		if(existe(x.getID())) {
 			System.err.println("El codigo de producto "+x.getID()+" ya existe");
@@ -25,11 +25,11 @@ public abstract class ArbolProducto {
 		++this.size;
 	}
 	
-	protected abstract NodoProducto insertar(NodoProducto producto, NodoProducto root);
+	protected abstract NodoArbol insertar(NodoArbol producto, NodoArbol root);
 	
 	public ModeloGenerico buscar(String codigo) {
 		
-		NodoProducto hallado = buscar(codigo, this.root);
+		NodoArbol hallado = buscar(codigo, this.root);
 		
 		return hallado != null? hallado.getDato():null;
 	}
@@ -38,7 +38,7 @@ public abstract class ArbolProducto {
 		return buscar(codigo, this.root) != null;
 	}
 	
-	protected NodoProducto buscar(String codigo, NodoProducto root) {
+	protected NodoArbol buscar(String codigo, NodoArbol root) {
 		if(root == null) {
 			return null;
 		}
@@ -69,7 +69,7 @@ public abstract class ArbolProducto {
 		System.out.println(preOrden(this.root));
 	}
 	
-	private String inOrden(NodoProducto root) {
+	private String inOrden(NodoArbol root) {
 		String value = "";
 		if(root != null) {
 			
@@ -80,7 +80,7 @@ public abstract class ArbolProducto {
 		return value;
 	}
 	
-	private String postOrden(NodoProducto root) {
+	private String postOrden(NodoArbol root) {
 		String value = "";
 		if(root != null) {
 			value += "\n"+ postOrden(root.getIzq());
@@ -90,7 +90,7 @@ public abstract class ArbolProducto {
 		return value;
 	}
 	
-	private String preOrden(NodoProducto root) {
+	private String preOrden(NodoArbol root) {
 		String value = "";
 		if(root != null) {
 			value += "\n"+ root.getDato();
@@ -100,7 +100,7 @@ public abstract class ArbolProducto {
 		return value;
 	}
 	
-	protected NodoProducto getMenor(NodoProducto root) {
+	protected NodoArbol getMenor(NodoArbol root) {
 		if(root.getIzq() == null) {
 			return root;
 		}
@@ -115,14 +115,14 @@ public abstract class ArbolProducto {
 	 */
 	public abstract void eliminar(String codigo);
 	
-	protected void hacerNull(NodoProducto n) {
+	protected void hacerNull(NodoArbol n) {
 		n.setDato(null);
 		n.setIzq(null);
 		n.setDer(null);
 		n.setBalance(0);
 	}
 	
-	protected void intercambiarNodos(NodoProducto n1, NodoProducto n2) {
+	protected void intercambiarNodos(NodoArbol n1, NodoArbol n2) {
 		n1.setDato(n2.getDato());
 		n1.setIzq(n2.getIzq());
 		n1.setDer(n2.getDer());

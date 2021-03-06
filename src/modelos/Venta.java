@@ -41,4 +41,10 @@ public class Venta extends AbsVenta implements Serializable{
         this.vendedor = vendedor;
     }
 
+	@Override
+	public String getCriterio() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

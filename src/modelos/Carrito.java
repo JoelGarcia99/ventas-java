@@ -21,4 +21,10 @@ public class Carrito extends AbsVenta{
 		this.productos.clear();
 		this.productosCantidad.clear();
 	}
+
+	@Override
+	public String getCriterio() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

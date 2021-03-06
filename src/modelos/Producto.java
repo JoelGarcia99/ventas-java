@@ -75,5 +75,24 @@ public class Producto extends ModeloGenerico implements Serializable{
     	File file = new File("productos/"+this.ID+"-producto.utm");
     	file.delete();
     }
+    
+    @Override
+    public String toString() {
+    	
+    	String objectString = "<html><body>";
+    	
+    	objectString += "<b>Nombre:&nbsp;</b>"+nombre;
+    	objectString += "<br><b>Descripcion:&nbsp;</b>"+descripcion;
+    	objectString += "<br><b>Precio:&nbsp;</b>"+precio;
+    	
+    	objectString += "</body></html>";
+    	
+    	return objectString;
+    }
+
+	@Override
+	public String getCriterio() {
+		return this.getNombre();
+	}
 
 }

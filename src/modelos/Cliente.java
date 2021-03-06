@@ -36,4 +36,10 @@ public class Cliente extends Persona {
 
     }
 
+	@Override
+	public String getCriterio() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

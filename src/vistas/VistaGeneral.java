@@ -38,8 +38,8 @@ public abstract class VistaGeneral extends JPanel {
     protected final SearchBar searchBar;
     protected final JPanel footer;
     protected final Buttons btnAgregar;
-    protected final Buttons btnActualizar;
-    protected final Buttons btnEliminar;
+    /*protected final Buttons btnActualizar;
+    protected final Buttons btnEliminar;*/
     protected ItemList itemsTabla;
     
     // Esto se rellena en la clase hija
@@ -58,8 +58,8 @@ public abstract class VistaGeneral extends JPanel {
     	
     	this.btnSearch = new Buttons("Buscar");    	
         this.btnAgregar = new Buttons("Agregar");
-        this.btnActualizar = new Buttons("Actualizar");
-        this.btnEliminar = new Buttons("Eliminar");
+        /*this.btnActualizar = new Buttons("Actualizar");
+        this.btnEliminar = new Buttons("Eliminar");*/
         this.footer = new JPanel();
         this.searchBar = new SearchBar(nombre, btnSearch);
         this.itemsTabla = new ItemList(columnas, editable);

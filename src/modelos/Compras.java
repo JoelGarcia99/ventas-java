@@ -73,6 +73,13 @@ public class Compras extends ModeloGenerico{
         escribiendoFichero.writeObject(this);
         escribiendoFichero.close();
     }
+
+
+	@Override
+	public String getCriterio() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

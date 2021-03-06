@@ -3,13 +3,13 @@ package estructuras;
 /**
  * @param <T> es el objeto a guardar
  */
-public class NodoProducto {
+public class NodoArbol {
 	private ModeloGenerico dato;
-	private NodoProducto izq;
-	private NodoProducto der;
+	private NodoArbol izq;
+	private NodoArbol der;
 	private int balance; // para rotacion AVL
 	
-	public NodoProducto(ModeloGenerico dato) {
+	public NodoArbol(ModeloGenerico dato) {
 		this.dato = dato;
 		this.balance = 1;
 		this.izq = null;
@@ -24,19 +24,19 @@ public class NodoProducto {
 		this.dato = dato;
 	}
 
-	public NodoProducto getIzq() {
+	public NodoArbol getIzq() {
 		return izq;
 	}
 
-	public void setIzq(NodoProducto izq) {
+	public void setIzq(NodoArbol izq) {
 		this.izq = izq;
 	}
 
-	public NodoProducto getDer() {
+	public NodoArbol getDer() {
 		return der;
 	}
 
-	public void setDer(NodoProducto der) {
+	public void setDer(NodoArbol der) {
 		this.der = der;
 	}
 

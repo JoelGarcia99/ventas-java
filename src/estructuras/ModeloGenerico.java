@@ -19,5 +19,6 @@ public abstract class ModeloGenerico implements Serializable{
 		ID = iD;
 	}
 	
+	public abstract String getCriterio();
 	
 }
