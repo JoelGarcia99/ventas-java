@@ -3,31 +3,22 @@ package modelos;
 import java.io.IOException;
 import java.io.Serializable;
 
-public abstract class Persona implements Serializable{
+import estructuras.ModeloGenerico;
+
+public abstract class Persona extends ModeloGenerico implements Serializable{
 
     private static final long serialVersionUID = -6292698498613458250L;
-    protected String cedula;
     protected String nombre;
     protected String apellido;
 
     public Persona(String cedula, String nombre, String apellido) {
-        this.cedula = cedula;
+    	
+    	super(cedula);
+    	
         this.nombre = nombre;
         this.apellido = apellido;
 
     }
-
-    
-
-    public String getCedula() {
-		return cedula;
-	}
-
-
-
-	public void setCedula(String cedula) {
-		this.cedula = cedula;
-	}
 
 
 

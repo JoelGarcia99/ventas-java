@@ -19,7 +19,7 @@ public class Vendedor extends Persona {
     @Override
     public void guardar() throws IOException{
         ObjectOutputStream escribiendoFichero = new ObjectOutputStream( 
-            new FileOutputStream(this.cedula+"-vendedor.utm") 
+            new FileOutputStream("vendedores/"+this.ID+"-vendedor.utm") 
         );
         escribiendoFichero.writeObject(this);
         escribiendoFichero.close();

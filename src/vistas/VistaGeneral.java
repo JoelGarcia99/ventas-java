@@ -9,8 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
 import design.Buttons;
+import helper.ButtonTableRender;
 import helper.LectorDirectorio;
 
 import java.awt.Component;
@@ -46,7 +46,7 @@ public abstract class VistaGeneral extends JPanel {
     protected String rutaArchivos;
     protected Buttons btnSearch;
     
-    public VistaGeneral(String nombre, String [] columnas, String ruta) {
+    public VistaGeneral(String nombre, String [] columnas, String ruta, int [] editable) {
     	
     	this.nombre = nombre;
     	this.columnas = columnas;
@@ -58,7 +58,7 @@ public abstract class VistaGeneral extends JPanel {
         this.btnEliminar = new Buttons("Eliminar");
         this.footer = new JPanel();
         this.searchBar = new SearchBar(nombre, btnSearch);
-        this.itemsTabla = new ItemList(columnas);
+        this.itemsTabla = new ItemList(columnas, editable);
         this.layout = new BorderLayout();
         
         // Tabla
@@ -69,12 +69,12 @@ public abstract class VistaGeneral extends JPanel {
 
         // Footer
         this.footer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.footer.setLayout(new BoxLayout(this.footer, BoxLayout.X_AXIS));
+        /*this.footer.setLayout(new BoxLayout(this.footer, BoxLayout.X_AXIS));
         this.footer.add(this.btnActualizar);
-        this.footer.add(Box.createHorizontalStrut(10));
+        this.footer.add(Box.createHorizontalStrut(10));*/
         this.footer.add(this.btnAgregar);
-        this.footer.add(Box.createHorizontalStrut(10));
-        this.footer.add(this.btnEliminar);
+        /*this.footer.add(Box.createHorizontalStrut(10));
+        this.footer.add(this.btnEliminar);*/
 
         // configuracion del panel
         this.setBorder(BorderFactory.createEmptyBorder(0, 15, 30, 15));
@@ -156,21 +156,38 @@ class SearchBar extends JPanel {
 class ItemList extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private JTable productosTabla;
+    public JTable productosTabla;
     public DefaultTableModel modelo;
     private JScrollPane scrollPanel;
 
+    public ItemList(String[] columnas, int[] editable) {
+        this.productosTabla = new JTable()
+        {
+			private static final long serialVersionUID = -4796854934713342244L;
 
-    public ItemList(String[] columnas) {
-        this.productosTabla = new JTable();
-        this.modelo = (DefaultTableModel) this.productosTabla.getModel();
+			public boolean isCellEditable(int rowIndex, int vColIndex) {
+                
+				for (int i : editable) {
+					if(i == vColIndex) return true;
+				}
+								
+				return false;
+            }
+			
+        };
         
+        
+        productosTabla.setDefaultRenderer(Object.class, new ButtonTableRender(productosTabla));
+        productosTabla.setDefaultEditor(Object.class, new ButtonTableRender(productosTabla));
+        
+        
+        this.modelo = (DefaultTableModel) this.productosTabla.getModel();        
         this.modelo.setColumnIdentifiers(columnas);
 
         this.scrollPanel = new JScrollPane(this.productosTabla);
 
         // Scroll
-        this.scrollPanel.setPreferredSize(new Dimension(800, 400));
+        this.scrollPanel.setPreferredSize(new Dimension(900, 400));
 
         // Panel
         this.add(this.scrollPanel);

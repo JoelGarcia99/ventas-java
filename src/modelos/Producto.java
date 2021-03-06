@@ -5,21 +5,21 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import estructuras.ModeloGenerico;
 import helper.Generador;
 
-public class Producto implements Serializable{
+public class Producto extends ModeloGenerico implements Serializable{
     private static final long serialVersionUID = -2516111676303890116L;
-    private String id;
     private String nombre;
     private String descripcion;
     private float precio;
     
     public Producto(String nombre, String descripcion, float precio) {
+    	super(Generador.generarID());
+    	
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
-
-        this.id = Generador.generarID();
     }
 
     public String getNombre() {
@@ -46,13 +46,10 @@ public class Producto implements Serializable{
         this.precio = precio;
     }
 
-    public String getID() {
-        return this.id;
-    }
 
     public void guardar() throws IOException {
         ObjectOutputStream escribiendoFichero = new ObjectOutputStream( 
-            new FileOutputStream("productos/"+this.id+"-producto.utm") 
+            new FileOutputStream("productos/"+this.ID+"-producto.utm") 
         );
         escribiendoFichero.writeObject(this);
         escribiendoFichero.close();

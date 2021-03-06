@@ -1,5 +1,11 @@
 package vistas;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -8,30 +14,24 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.MainPanel;
-import modelos.Cliente;
+import modelos.Vendedor;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+public class VendedoresPanel extends VistaGeneral{
 
-public class ClientesPanel extends VistaGeneral{
+	private static final long serialVersionUID = 1849483027521228507L;
 
-	private static final long serialVersionUID = -8239045406423479266L;
-
-	public ClientesPanel() {
+	public VendedoresPanel() {
 		super(
-				"Clientes", 
-				new String[]{ "Cedula", "Nombres", "Apellidos", "Editar", "Eliminar"}, 
-				"clientes",
-				new int[] {3, 4}
+				"Vendedores", 
+				new String[]{ "Cedula", "Nombres", "Apellidos", "Editar", "Eliminar"},
+				"vendedores",
+				new int[] {}
 		);
 	}
-	
+
 	@Override
 	protected void agregaItem() {
-		AgregarClienteForm form = new AgregarClienteForm();
+		AgregarVendedorForm form = new AgregarVendedorForm();
 		
 		JOptionPane.showMessageDialog(null, form, "Ingreso", JOptionPane.INFORMATION_MESSAGE);
 		Object [] validator = form.validar();
@@ -41,15 +41,15 @@ public class ClientesPanel extends VistaGeneral{
 			return;
 		}
 		
-		Cliente cliente = form.guardar();
+		Vendedor vendedor = form.guardar();
 		
-		if(cliente != null) {	
+		if(vendedor != null) {		
 			// para despues poder buscar
-			MainPanel.arbolCliente.insertar(cliente);	
+			MainPanel.arbolVendedor.insertar(vendedor);
 	        this.itemsTabla.modelo.addRow(new Object[] {
-	        		cliente.getID(),
-	        		cliente.getNombre(),
-	        		cliente.getApellido()
+	        		vendedor.getID(),
+	        		vendedor.getNombre(),
+	        		vendedor.getApellido()
 	        });
 	        this.itemsTabla.updateUI();
 		}
@@ -58,18 +58,18 @@ public class ClientesPanel extends VistaGeneral{
 	@Override
 	protected void insertaItemTabla(ObjectInputStream stream)
 			throws IOException, FileNotFoundException, ClassNotFoundException {
-		Cliente cliente = (Cliente) stream.readObject();
+		Vendedor vendedor = (Vendedor) stream.readObject();
 		stream.close();
         
-        if(cliente == null) return;
+        if(vendedor == null) return;
 
 		// para despues poder buscar
-		MainPanel.arbolCliente.insertar(cliente);
-
+		MainPanel.arbolVendedor.insertar(vendedor);
+		
         this.itemsTabla.modelo.addRow(new Object[] {
-        		cliente.getID(),
-        		cliente.getNombre(),
-        		cliente.getApellido()
+        		vendedor.getID(),
+        		vendedor.getNombre(),
+        		vendedor.getApellido()
         });
         
         JButton btn = new JButton("Editar");
@@ -101,7 +101,7 @@ public class ClientesPanel extends VistaGeneral{
 
 }
 
-class AgregarClienteForm extends JPanel {
+class AgregarVendedorForm extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private final BoxLayout layout;
@@ -109,7 +109,7 @@ class AgregarClienteForm extends JPanel {
     private final JTextField apellidos;
     private final JTextField cedula;
 
-    public AgregarClienteForm() {
+    public AgregarVendedorForm() {
         this.layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         this.nombre = new JTextField();
         this.apellidos = new JTextField();
@@ -145,21 +145,21 @@ class AgregarClienteForm extends JPanel {
         return new Object[] { correcto, mensaje };
     }
 
-    public Cliente guardar() {
+    public Vendedor guardar() {
         if ((boolean) validar()[0]) {
-            Cliente cliente = new Cliente(
+            Vendedor vendedor = new Vendedor(
             		this.cedula.getText(), 
             		this.nombre.getText(), 
             		this.apellidos.getText()
             );
 
             try {
-            	cliente.guardar();
-                JOptionPane.showMessageDialog(null, "Cliente Guardado");
+            	vendedor.guardar();
+                JOptionPane.showMessageDialog(null, "Vendedor Guardado");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Ocurrio un error\n" + e.getMessage());
             }
-            return cliente;
+            return vendedor;
         }
         return null;
     }

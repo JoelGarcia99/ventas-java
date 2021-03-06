@@ -18,7 +18,7 @@ public class Cliente extends Persona {
     @Override
     public void guardar() throws IOException{
         ObjectOutputStream escribiendoFichero = new ObjectOutputStream( 
-            new FileOutputStream("clientes/"+this.cedula+"-cliente.utm") 
+            new FileOutputStream("clientes/"+this.ID+"-cliente.utm") 
         );
         escribiendoFichero.writeObject(this);
         escribiendoFichero.close();

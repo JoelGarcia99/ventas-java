@@ -9,7 +9,6 @@ public class LectorDirectorio {
         ArrayList<String> archivo = new ArrayList<String>();
 
 		for (File file : carpeta.listFiles()) {
-            System.out.println(file.getAbsolutePath());
 
             String [] splitted = file.getName().split("\\.");
             if(splitted.length == 0) continue;

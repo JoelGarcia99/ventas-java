@@ -28,11 +28,12 @@ public class LateralPanel extends JPanel {
 
     // ALERTA: No cambiar las posiciones de estos elementos
     private static final String [] buttonsNames = {
-        "Empleados",
         "Productos",
-        "Ventas",
         "Vendedores",
         "Clientes",
+        "Ventas",
+        "Compras",
+        "",
         "Salir" // es necesario que esta sea la posicion 0, NO CAMBIAR ESTO
     };
 
@@ -47,7 +48,7 @@ public class LateralPanel extends JPanel {
         this.btns = new ArrayList<Buttons>();
         this.layout = new BorderLayout();
         this.buttonsPanel = new JPanel();
-        this.btnLayout = new BoxLayout(this.buttonsPanel, BoxLayout.Y_AXIS);
+        this.btnLayout = new BoxLayout(this.buttonsPanel, BoxLayout.PAGE_AXIS);
 
         // Configuracion de los botones
         this.buttonsPanel.setLayout(this.btnLayout);
@@ -68,9 +69,14 @@ public class LateralPanel extends JPanel {
 
         this.buttonsPanel.add(Box.createRigidArea(new Dimension(0, 30)));
         for (Buttons button : btns) {
+        	if(button.getText().equals("")) {
+        		break;
+        	}
             this.buttonsPanel.add(button);
             this.buttonsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
+        
+        this.add(this.btns.get(this.btns.size() - 1), BorderLayout.SOUTH);
 
         notifyObservadores();
         
@@ -84,7 +90,9 @@ public class LateralPanel extends JPanel {
 
         // Evento de salir
         for (Buttons button : btns) {
+        	
             button.setAlignmentX(Component.CENTER_ALIGNMENT);
+            button.setMaximumSize(new Dimension(150, 30));
             button.addActionListener(this.event);
         }
     }
@@ -122,11 +130,11 @@ public class LateralPanel extends JPanel {
 
     private int stringToInteger(String name) {
         switch(name) {
-            case "Empleados": return 0;
-            case "Productos": return 1;
-            case "Ventas": return 2;
-            case "Vendedores": return 3;
-            case "Clientes": return 4;
+            case "Productos": return 0;
+            case "Vendedores": return 1;
+            case "Clientes": return 2;
+            case "Ventas": return 3;
+            case "Compras": return 4;
             case "Salir":
             default: return 5;
         }
