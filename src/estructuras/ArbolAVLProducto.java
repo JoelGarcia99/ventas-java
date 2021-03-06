@@ -25,9 +25,10 @@ public class ArbolAVLProducto extends ArbolProducto{
 	}
 	
 	@Override
-	public void eliminar(String codigo) {	
+	public void eliminar(String codigo) {
 		this.root = eliminar(codigo, this.root);
 	}
+	
 	
 	private NodoProducto eliminar(String codigo, NodoProducto root) {
 		
@@ -48,7 +49,11 @@ public class ArbolAVLProducto extends ArbolProducto{
 				root.getIzq().setDer(root.getDer());
 				root = root.getIzq();
 				
-				root = insertar(mayor_subarbol, root);
+				if(mayor_subarbol != null)
+				{
+					root = insertar(mayor_subarbol, root);
+				}
+				
 			}else {
 				root = root.getDer();
 			}

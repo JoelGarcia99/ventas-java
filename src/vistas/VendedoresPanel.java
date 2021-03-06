@@ -99,6 +99,12 @@ public class VendedoresPanel extends VistaGeneral{
 		
 	}
 
+	@Override
+	protected void buscarItem(String ID) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 
 class AgregarVendedorForm extends JPanel {

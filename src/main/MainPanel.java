@@ -25,6 +25,7 @@ import modelos.Carrito;
 import modelos.Producto;
 import modelos.Venta;
 import vistas.ClientesPanel;
+import vistas.ComprasPanel;
 import vistas.ProductoPanel;
 import vistas.VendedoresPanel;
 import vistas.VentasPanel;
@@ -43,6 +44,7 @@ public class MainPanel extends JPanel implements Observador{
 	public static ArbolAVLProducto arbolPro = new ArbolAVLProducto();
 	public static ArbolAVLProducto arbolCliente = new ArbolAVLProducto();
 	public static ArbolAVLProducto arbolVendedor = new ArbolAVLProducto();
+	public static ArbolAVLProducto arbolCompra = new ArbolAVLProducto();
 	
 	private final MainFrame frame;
 	private final BorderLayout layout;
@@ -63,8 +65,9 @@ public class MainPanel extends JPanel implements Observador{
 		new VendedoresPanel(),
 		new ClientesPanel(),
 		new VentasPanel(),
-		new JPanel(),
+		new ComprasPanel(),
 	};
+	
 	private JPanel panel;
 
 	public MainPanel() {
@@ -109,6 +112,7 @@ public class MainPanel extends JPanel implements Observador{
 		menuCarrito.add(descartarCarrito);
 		
 		menuArchivo.add(salirArchivo);
+		salirArchivo.addActionListener(event);
 		
 		verCarrito.addActionListener(event);
 		agregarAlCarrito.addActionListener(event);

@@ -3,16 +3,18 @@ package vistas;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+
 import design.Buttons;
 import helper.ButtonTableRender;
 import helper.LectorDirectorio;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -34,15 +36,16 @@ public abstract class VistaGeneral extends JPanel {
 
     protected final BorderLayout layout;
     protected final SearchBar searchBar;
-    protected final ItemList itemsTabla;
     protected final JPanel footer;
     protected final Buttons btnAgregar;
     protected final Buttons btnActualizar;
     protected final Buttons btnEliminar;
+    protected ItemList itemsTabla;
     
     // Esto se rellena en la clase hija
     protected String nombre = ""; // nombre del modulo
     protected String [] columnas;
+    protected int[] editable;
     protected String rutaArchivos;
     protected Buttons btnSearch;
     
@@ -50,6 +53,7 @@ public abstract class VistaGeneral extends JPanel {
     	
     	this.nombre = nombre;
     	this.columnas = columnas;
+    	this.editable = editable;
     	this.rutaArchivos = ruta;
     	
     	this.btnSearch = new Buttons("Buscar");    	
@@ -66,6 +70,8 @@ public abstract class VistaGeneral extends JPanel {
 
         this.btnAgregar.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.btnAgregar.addActionListener(event);
+        
+        this.btnSearch.addActionListener(event);
 
         // Footer
         this.footer.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -84,11 +90,23 @@ public abstract class VistaGeneral extends JPanel {
         this.add(this.footer, BorderLayout.SOUTH);
         
     }
+    
+    protected void redibujarTabla() {
+    	this.remove(this.itemsTabla);
+    	this.itemsTabla = new ItemList(columnas, editable);
+        leeProductos();
+        this.add(this.itemsTabla, BorderLayout.CENTER);
+        
+        this.updateUI();
+    }
 
     protected ActionListener event = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("Agregar")) {
             	agregaItem();
+            }
+            if(e.getActionCommand().equals("Buscar")) {  
+            	buscarItem(searchBar.searchBar.getText());
             }
         }
 
@@ -113,6 +131,9 @@ public abstract class VistaGeneral extends JPanel {
 		}
 
     }
+    
+    protected abstract void buscarItem(String ID);
+  
 
 }
 
@@ -124,7 +145,7 @@ public abstract class VistaGeneral extends JPanel {
 class SearchBar extends JPanel {
 
     private static final long serialVersionUID = -493443701311276889L;
-    private JTextField searchBar;
+    public JTextField searchBar;
     private JLabel title;
 
     public SearchBar(String titulo, Buttons btnSearch) {
@@ -146,6 +167,7 @@ class SearchBar extends JPanel {
         this.add(btnSearch);
         this.add(Box.createVerticalStrut(20));
     }
+    
 }
 
 /**
@@ -180,6 +202,7 @@ class ItemList extends JPanel {
         productosTabla.setDefaultRenderer(Object.class, new ButtonTableRender(productosTabla));
         productosTabla.setDefaultEditor(Object.class, new ButtonTableRender(productosTabla));
         
+        productosTabla.setCellSelectionEnabled(true);
         
         this.modelo = (DefaultTableModel) this.productosTabla.getModel();        
         this.modelo.setColumnIdentifiers(columnas);

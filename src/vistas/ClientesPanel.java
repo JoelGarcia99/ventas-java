@@ -99,6 +99,12 @@ public class ClientesPanel extends VistaGeneral{
 		
 	}
 
+	@Override
+	protected void buscarItem(String ID) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 
 class AgregarClienteForm extends JPanel {

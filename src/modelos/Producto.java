@@ -1,5 +1,6 @@
 package modelos;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -53,6 +54,26 @@ public class Producto extends ModeloGenerico implements Serializable{
         );
         escribiendoFichero.writeObject(this);
         escribiendoFichero.close();
+    }
+    
+    public void actualizar() throws IOException {
+    	
+    	File file = new File("productos/"+this.ID+"-producto.utm");
+    	
+    	if(file.exists()) {
+    		file.delete();
+    	}
+    	
+    	ObjectOutputStream escribiendoFichero = new ObjectOutputStream( 
+                new FileOutputStream(file)
+        );
+        escribiendoFichero.writeObject(this);
+        escribiendoFichero.close();
+    }
+    
+    public void eliminar() throws IOException {
+    	File file = new File("productos/"+this.ID+"-producto.utm");
+    	file.delete();
     }
 
 }

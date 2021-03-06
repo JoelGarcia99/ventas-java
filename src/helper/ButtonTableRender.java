@@ -1,13 +1,15 @@
 package helper;
 
+import java.awt.Color;
 import java.awt.Component;
-
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
 
 public class ButtonTableRender extends AbstractCellEditor implements 
 	TableCellRenderer, TableCellEditor {
@@ -36,22 +38,18 @@ public class ButtonTableRender extends AbstractCellEditor implements
 		if(value instanceof JButton) {
 			return (JButton) value;
 		}
-		
-		if(value != null) return new JLabel(value.toString());
-		return new JLabel();
+
+		return null;
 	}
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-
 		if(value instanceof JButton) {
 			return (JButton) value;
 		}
 		
-		if(value != null) return new JLabel(value.toString());
-		
-		return new JLabel();
+		return (new DefaultTableCellRenderer()).getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	}
 
 

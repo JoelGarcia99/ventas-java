@@ -5,7 +5,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import main.MainPanel;
@@ -34,7 +33,7 @@ public class ProductoPanel extends VistaGeneral{
 	
 	@Override
 	protected void agregaItem() {
-		AgregarProductoForm form = new AgregarProductoForm();
+		AgregarProductoForm form = new AgregarProductoForm(null);
 		
 		JOptionPane.showMessageDialog(null, form, "Ingreso", JOptionPane.INFORMATION_MESSAGE);
 		
@@ -58,7 +57,8 @@ public class ProductoPanel extends VistaGeneral{
 	        		producto.getDescripcion(),
 	        		producto.getPrecio()
 	        });
-	        this.itemsTabla.updateUI();
+	        generaBotones(producto);
+	        itemsTabla.productosTabla.updateUI();
 		}
 	}
 
@@ -79,9 +79,16 @@ public class ProductoPanel extends VistaGeneral{
         		producto.getPrecio()
         });
         		
+        generaBotones(producto);
+
+	}
+	
+	private void generaBotones(Producto producto) {
 		JButton btn = new JButton("Editar");
 		JButton btnEliminar = new JButton("Eliminar");
 		JButton btnCarrito = new JButton("Al carrito");
+		
+		final int rowIndex = itemsTabla.modelo.getRowCount() - 1;
 		
 		ActionListener evento = new ActionListener() {			
 			@Override
@@ -89,10 +96,19 @@ public class ProductoPanel extends VistaGeneral{
 				
 				switch(e.getActionCommand()) {
 					case "Editar": {
-						JOptionPane.showMessageDialog(null, "Editar");
+						Producto new_ = editarProducto(producto);
+						
+						if(new_ == null) return;
+																		
+						itemsTabla.modelo.setValueAt(new_.getID(), rowIndex, 0);
+						itemsTabla.modelo.setValueAt(new_.getNombre(), rowIndex, 1);
+						itemsTabla.modelo.setValueAt(new_.getDescripcion(), rowIndex, 2);
+						itemsTabla.modelo.setValueAt(new_.getPrecio(), rowIndex, 3);
+						
 					}; break;
 					case "Eliminar": {
-						JOptionPane.showMessageDialog(null, "Eliminar");
+						eliminarProducto(producto);
+						redibujarTabla();
 					}; break;
 					case "Al carrito": {
 						int cantidad = 0;
@@ -118,10 +134,54 @@ public class ProductoPanel extends VistaGeneral{
 		this.itemsTabla.modelo.setValueAt(btn, row, 4);
 		this.itemsTabla.modelo.setValueAt(btnEliminar, row, 5);
 		this.itemsTabla.modelo.setValueAt(btnCarrito, row, 6);
-
 	}
 	
+	private Producto editarProducto(Producto producto) {
+		AgregarProductoForm form = new AgregarProductoForm(producto);
+		JOptionPane.showMessageDialog(null, form);
+		
+		if(!(boolean) form.validar()[0]) {
+			JOptionPane.showMessageDialog(null, form.validar()[1]);
+			return producto;
+		}
+		
+		Producto new_ = form.guardar();
+		
+		if(new_ == null) return null;
+		
+		MainPanel.arbolPro.eliminar(new_.getID());
+		MainPanel.arbolPro.insertar(new_);
+		JOptionPane.showMessageDialog(null, "Producto actualizado");
+		return new_;
+	}
+	
+	private void eliminarProducto(Producto producto) {
+		MainPanel.arbolPro.eliminar(producto.getID());
+		try {
+			producto.eliminar();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "No se pudo eliminar\n"+e.getMessage());
+			return;
+		}
+		JOptionPane.showMessageDialog(null, "Producto eliminado");
+	}
+
+	@Override
+	protected void buscarItem(String ID) {
+		if(ID == null) ID = "";
+		
+		Producto pro = (Producto) MainPanel.arbolPro.buscar(ID);
+		
+		if(pro == null) {
+			JOptionPane.showMessageDialog(null, "Producto no hallado");
+			return;
+		}
+		
+		JOptionPane.showMessageDialog(null, pro.getID());
+	}
 }
+
+// 290652500357500
 
 class AgregarProductoForm extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -130,13 +190,21 @@ class AgregarProductoForm extends JPanel {
     private final JTextField nombre;
     private final JTextField precio;
     private final JTextField descripcion;
+    private final Producto producto;
 
-    public AgregarProductoForm() {
+    public AgregarProductoForm(Producto producto) {
+    	this.producto = producto;
         this.layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         this.nombre = new JTextField();
         this.precio = new JTextField();
         this.descripcion = new JTextField();
 
+        if(producto != null) {
+        	this.nombre.setText(producto.getNombre());
+        	this.precio.setText(producto.getPrecio()+"");
+        	this.descripcion.setText(producto.getDescripcion());
+        }
+        
         this.setLayout(this.layout);
 
         // Formulario
@@ -172,16 +240,36 @@ class AgregarProductoForm extends JPanel {
 
     public Producto guardar() {
         if ((boolean) validar()[0]) {
-            Producto producto = new Producto(this.nombre.getText(), this.descripcion.getText(),
-                    Float.parseFloat(this.precio.getText()));
 
-            try {
-                producto.guardar();
-                JOptionPane.showMessageDialog(null, "Producto Guardado");
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Ocurrio un error\n" + e.getMessage());
-            }
-            return producto;
+        	// Si esto se cumple quiere decir que se va a actualizar
+        	if(this.producto != null) {
+        		this.producto.setNombre(nombre.getText());
+        		this.producto.setDescripcion(descripcion.getText());
+        		this.producto.setPrecio(Float.parseFloat(precio.getText()));
+        		
+        		try {
+					this.producto.actualizar();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "No se pudo actualizar.\n"+e.getMessage());
+				}
+        		
+        		return this.producto;
+        	}
+        	else {
+
+        		// Si se llega hasta aqui es porque es un producto nuevo
+                Producto producto = new Producto(this.nombre.getText(), this.descripcion.getText(),
+                        Float.parseFloat(this.precio.getText()));
+        	
+                try {
+                    producto.guardar();
+                    JOptionPane.showMessageDialog(null, "Producto Guardado");
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Ocurrio un error\n" + e.getMessage());
+                }
+                
+                return producto;
+        	}
         }
         return null;
     }

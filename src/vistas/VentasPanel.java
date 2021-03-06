@@ -68,5 +68,11 @@ public class VentasPanel extends VistaGeneral {
 		this.itemsTabla.modelo.setValueAt(btn, row, 4);
 	}
 
+	@Override
+	protected void buscarItem(String ID) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
 

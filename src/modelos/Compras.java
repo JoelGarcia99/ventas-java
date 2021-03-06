@@ -1,5 +1,8 @@
 package modelos;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 
 import estructuras.ModeloGenerico;
@@ -62,6 +65,14 @@ public class Compras extends ModeloGenerico{
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
+	
+    public void guardar() throws IOException {
+        ObjectOutputStream escribiendoFichero = new ObjectOutputStream( 
+            new FileOutputStream("compras/"+this.ID+"-compra.utm") 
+        );
+        escribiendoFichero.writeObject(this);
+        escribiendoFichero.close();
+    }
 	
 	
 
